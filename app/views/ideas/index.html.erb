@@ -1,0 +1,39 @@
+<div class="container">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Ideas</th>
+      <% @ideas.each do |i| %>
+    </tr>
+  </thead>
+      <tbody>
+        <tr>
+          <td>
+            <strong><%= link_to i.title, idea_path(i) %></strong><br>
+            <%= i.body %><br>
+            <i style="color:lightslategray"><strong>- by <%= i.user.first_name %><br></strong></i>
+            <p align="right">
+
+              <% if i.liked_by?(current_user) %>
+                <%= link_to "Unlike", idea_like_path(i, i.like_for(current_user)), method: :delete %>
+              <% else %>
+                <%= link_to "Like", idea_likes_path(i), method: :post %>
+              <% end %>
+
+              |
+              <% if i.member_by?(current_user) %>
+                <%= link_to "Joined", idea_member_path(i, i.member_for(current_user)), method: :delete %>
+              <% else %>
+                <%= link_to "Join", idea_members_path(i), method: :post %>
+              <% end %>
+
+              <%= "Members: #{i.members.count} | Likes: #{i.likes.count}"%>
+
+
+            </p>
+
+          </td>
+      <% end %>
+
+
+</div>

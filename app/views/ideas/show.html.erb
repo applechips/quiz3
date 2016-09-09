@@ -1,0 +1,44 @@
+<div class="container">
+  <h1><%= @idea.title %></h1>
+  <p><%= @idea.body %></p>
+
+
+  <% user_like = @idea.like_for current_user %>
+  <% if user_like.present? %>
+      <%= link_to "Unlike", idea_like_path(@idea, user_like), method: :delete %>
+  <% else %>
+      <%= link_to "Like", idea_likes_path(@idea), method: :post %>
+  <% end %>
+  |
+  <% if @idea.member_by?(current_user) %>
+    <%= link_to "Joined", idea_member_path(@idea, @idea.member_for(current_user)), method: :delete %>
+  <% else %>
+    <%= link_to "Join", idea_members_path(@idea), method: :post %>
+  <% end %>
+
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <%= "Likes: #{@idea.likes.count} | Members: #{@idea.members.count} "%><br>
+  <strong>Members:</strong><br>
+    <% @idea.users.each do |member| %>
+      <%= member.full_name %><br>
+    <% end %>
+</div>
+
+<div class="container-fluid">
+  <h2>Comments</h2>
+  <%= form_for [@idea, @comment] do |f| %>
+    <div>
+      <%= f.text_area :body %>
+    </div>
+      <%= f.submit %>
+  <% end %>
+  <hr>
+  <div>
+    <% @comments.each do |c| %>
+      <strong><%= c.user.first_name %>: </strong>
+      <%= c.body %>
+
+      <hr>
+    <% end %>
+  </div>
+</div>
